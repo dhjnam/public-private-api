@@ -1,0 +1,160 @@
+openapi: '3.0.3'
+info:
+  version: '1.0.0'
+  title: 'private public API'
+  description: Manage your private / public key
+servers:
+  - url: http://localhost:7000/api/v0
+paths:
+  /register:
+    post:
+      summary: Add a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password: 
+                  type: string
+      responses:
+        201:
+          description: New user created
+        409:
+          description: Username already taken or invalid password
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /login:
+    post:
+      summary: Login with username and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Successfully logged in.
+            The session ID is returned in a cookie named `JSESSIONID`. 
+            You need to include this cookie in subsequent requests.
+          headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: JSESSIONID=abcde12345; Path=/; HttpOnly
+        401:
+          description: Invalid username or password
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /private:
+    get:
+      summary: Get my private key
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: My private key
+          content:
+            application/json:
+              schema:
+                type: number
+        401:
+          description: Not logged in
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public:
+    get:
+      summary: Get public key of a user. If no user is specified and I am logged in, get my own public key
+      parameters:
+        - in: query
+          required: true
+          name: user
+          schema:
+            type: string
+          description: The user whose public key I want to see
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: number
+        404:
+          description: If a user has been specified but does not exist
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /generate/{method}:
+    post:
+      summary: Create my private public key pair
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: method
+          required: true
+          schema:
+            type: string
+            enum:
+              - RSA
+              - ECC
+      responses:
+        200:
+          description: Successfully created my private / public key pair
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  publicKey:
+                    type: number
+                  privateKey:
+                    type: number
+        401:
+          description: Not logged in
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: Internal server error
+          type: string
+  securitySchemes:
+    cookieAuth:         # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: JSESSIONID  # cookie name
