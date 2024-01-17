@@ -1,0 +1,43 @@
+{
+  "bsonType": "object",
+  "additionalProperties": false,
+  "properties": {
+    "_id": {},
+    "user": {
+      "description": "The userId, the key pairs belong to",
+      "bsonType": "objectId"
+    },
+    "rsa": {
+      "description": "rsa key pairs",
+      "bsonType": "object",
+      "required": [
+        "private",
+        "public"
+      ], 
+      "properties": {
+        "private": {
+          "bsonType": "string"
+        },
+        "public": {
+          "bsonType": "string"
+        }
+      }
+    },
+    "ec": {
+      "description": "ecc key pairs",
+      "bsonType": "object",
+      "required": [
+        "private",
+        "public"
+      ], 
+      "properties": {
+        "private": {
+          "bsonType": "string"
+        },
+        "public": {
+          "bsonType": "string"
+        }
+      }
+    }
+  }
+}

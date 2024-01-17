@@ -53,15 +53,20 @@ paths:
                 password:
                   type: string
       responses:
-        200:
-          description: Successfully logged in.
-            The session ID is returned in a cookie named `JSESSIONID`. 
+        201:
+          description: Successfully logged in. 
+            The session ID is returned in a cookie named `connect.sid`. 
             You need to include this cookie in subsequent requests.
+            Redirection should be done in the frontend.
           headers: 
             Set-Cookie:
               schema: 
                 type: string
-                example: JSESSIONID=abcde12345; Path=/; HttpOnly
+                example: connect.sid=...
+                  # =s%3AGeGScgegPoOMNMZKLcguON6Qhc3ivpz8
+                  # .Z5p6yXlSYs2W4UhpGqh2BON6Ris9JbRkRQNb6XN5Qcw; 
+                  # Path=/; 
+                  # HttpOnly;
         401:
           description: Invalid username or password
         500:
@@ -70,11 +75,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /private:
+  /private/{method}:
     get:
       tags:
         - number
       summary: Get my private key
+      parameters:
+        - $ref: '#/components/parameters/method'
       security:
         - cookieAuth: []
       responses:
@@ -84,6 +91,9 @@ paths:
             application/json:
               schema:
                 type: number
+        204:
+          description: Logged in, but I haven't generated any private / public key yet.
+            The frontend should redirect to /generate
         401:
           description: Not logged in
         500:
@@ -92,27 +102,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /public:
+  /public/{method}:
     get:
       tags:
         - number
-      summary: Get public key of a user. If no user is specified and I am logged in, get my own public key
+      summary: Get public key of a user. If no user is specified and I am logged in, get my own public key.
       parameters:
+        - $ref: '#/components/parameters/method'
         - in: query
-          required: true
+          required: false
           name: user
           schema:
             type: string
-          description: The user whose public key I want to see
+          description: The user whose public key I want to see.
+            If no user is specified and I am logged in, provide my public key.
+            If no user is specified and nobody is logged in, return a 404.
       responses:
         200:
-          description: OK
+          description: Private / public key pair has been generated 
+            Public key of the specified user (or me, if I am logged in)
           content:
             application/json:
               schema:
                 type: number
+        204:
+          description: The specified user (or me, if I am logged in) has not yet generated any private / public key pair.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         404:
           description: If a user has been specified but does not exist
+            or if any user has been specified and I am not logged in.
         500:
           description: Internal server error
           content:
@@ -123,21 +147,14 @@ paths:
     post:
       tags:
         - number
-      summary: Create my private public key pair
+      summary: Create my private / public key pair.
       security:
         - cookieAuth: []
       parameters:
-        - in: path
-          name: method
-          required: true
-          schema:
-            type: string
-            enum:
-              - RSA
-              - ECC
+        - $ref: '#/components/parameters/method'
       responses:
-        200:
-          description: Successfully created my private / public key pair
+        201:
+          description: Successfully created my private / public key pair.
           content:
             application/json:
               schema:
@@ -147,15 +164,19 @@ paths:
                     type: number
                   privateKey:
                     type: number
+        400:
+          description: Specified method does not exist
         401:
           description: Not logged in
+        409:
+          description: You already have an existing private / public key pair for the specified method.
+            Should you still want to generate a new pair and overwrite it, use PUT instead of POST.
         500:
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
 components:
   schemas:
     Error:
@@ -166,8 +187,18 @@ components:
         message:
           description: Internal server error
           type: string
+  parameters:
+    method:
+      in: path
+      name: method
+      required: true
+      schema:
+        type: string
+        enum:
+          - rsa
+          - ec
   securitySchemes:
     cookieAuth:         # arbitrary name for the security scheme; will be used in the "security" key later
       type: apiKey
       in: cookie
-      name: JSESSIONID  # cookie name
+      name: connect.sid  # cookie name

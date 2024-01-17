@@ -1,0 +1,22 @@
+{
+  "bsonType": "object",
+  "required": [
+    "username",
+    "hashedPassword"
+  ],
+  "properties": {
+    "_id": {},
+    "username": {
+      "description": "Unique username",
+      "bsonType": "string"
+    },
+    "hashedPassword": {
+      "description": "Hashed password",
+      "bsonType": "binData"
+    },
+    "salt": {
+      "description": "Password salt",
+      "bsonType": "binData"
+    }
+  }
+}

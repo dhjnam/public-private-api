@@ -1,0 +1,6 @@
+env/
+node_modules/
+mongodb/
+**/redis/dump.rdb
+sketches/
+dist/
