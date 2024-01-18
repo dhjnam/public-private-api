@@ -1,7 +1,5 @@
 import express from 'express'
-import passport from 'passport'
 import { db } from '../db/conn'
-import { abort } from 'process'
 import { ObjectId } from 'mongodb'
 
 import { promisify } from 'util'

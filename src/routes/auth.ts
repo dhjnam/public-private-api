@@ -1,11 +1,8 @@
 import express from 'express'
 import crypto from 'crypto'
-// import { Binary } from 'mongodb'
 import passport from 'passport'
 import { db } from '../db/conn'
 import { Strategy } from 'passport-local'
-
-// import fs from 'fs'
 
 import type { IUser } from '../db/user'
 
@@ -40,9 +37,6 @@ passport.use(strategy)
 passport.use('local', strategy)
 
 passport.serializeUser(function(user: IUser, cb) {
-  // console.log('serialize')
-  // console.log(user)
-  // fs.writeFile(`./data/serialize_${user.username}.json`, JSON.stringify(user), () => {})
   process.nextTick(function() {
     cb(null, { 
       id: user._id, 
@@ -52,9 +46,6 @@ passport.serializeUser(function(user: IUser, cb) {
 });
 
 passport.deserializeUser(function(user: IUser, cb) {
-  // console.log('deserialize')
-  // console.log(user)
-  // fs.writeFile(`./data/deserialize_${user.username}.json`, JSON.stringify(user), () => {})
   process.nextTick(function() {
     return cb(null, user);
   });

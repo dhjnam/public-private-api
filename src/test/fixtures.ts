@@ -1,13 +1,9 @@
-import mongodb from 'mongodb'
 import { db, mongoClient } from '../db/conn'
 import { redisClient } from '../redis/conn'
-import seed from './seed'
 import { User } from '../db/user'
 import { Number } from '../db/number'
 
-import { app, server } from '../app'
-
-import fs from 'fs/promises'
+import { server } from '../app'
 
 
 exports.mochaGlobalSetup = async function() {
@@ -21,7 +17,6 @@ exports.mochaGlobalSetup = async function() {
       User.init(),
       Number.init(),
     ])
-    await seed();
 
   } catch (error) {
     console.log(error);

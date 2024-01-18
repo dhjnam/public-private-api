@@ -51,8 +51,13 @@ db.createCollection("users", {
     $jsonSchema: userSchema
   }
 });
+
+db.users.createIndex({ username: 1 }, { unique: true });
+
 db.createCollection("numbers", {
   validator: {
     $jsonSchema: numberSchema
   }
 });
+
+db.numbers.createIndex({ user: 1 }, { unique: true });

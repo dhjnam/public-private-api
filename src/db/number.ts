@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 config({ path: `./env/${process.env.NODE_ENV}.env` });
 
-import mongodb from 'mongodb';
 import { db } from './conn';
 
 import path from 'path';

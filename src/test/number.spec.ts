@@ -1,5 +1,4 @@
-import { db, mongoClient } from '../db/conn';
-import { app, server } from '../app';
+import { app } from '../app';
 import supertest from 'supertest';
 import chai from 'chai';
 import { getCookieStringByName } from '../util/cookies'
@@ -123,28 +122,6 @@ context('public / private', function() {
   // TODO: In all 200 status codes, you must actually check that the provided public or private keys belong to the person specified in ?user=person
 
   before(function() { this.start = new Date() })
-  
-  // before(async function() {
-  //   await Promise.all([
-  //     // register, login, generate for legend
-  //     (async function() {
-  //       await register('legend')();
-  //       await login('legend').call(this);
-  //       await generate('legend').call(this);
-  //     }).call(this),
-  //     // register, login, generate for logen
-  //     (async function() {
-  //       await register('logen')();
-  //       await login('logen').call(this);
-  //       await generate('logen').call(this);
-  //     }).call(this),
-  //     // register, login for neo, but don't generate
-  //     (async function() {
-  //       await register('neo')();
-  //       await login('neo').call(this);
-  //     }).call(this)
-  //   ])
-  // })
 
   before(async function() {
     await Promise.all([
