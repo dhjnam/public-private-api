@@ -1,0 +1,37 @@
+version: 'v2.23.0-desktop.1'
+services:
+  mongodb:
+    image: dhjnam/public-private-mongodb:1.0.0
+    ports: 
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=reallysupersecureadminpassword
+      - MONGO_INITDB_DATABASE=private-public
+      - MONGO_NON_ROOT_USERNAME=api
+      - MONGO_NON_ROOT_PASSWORD=reallysupersecurepassword
+    volumes:
+      - mongodb-data:/data/db
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8080:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=reallysupersecureadminpassword
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_BASICAUTH_USERNAME=user
+      - ME_CONFIG_BASICAUTH_PASSWORD=wer123
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+  api:
+    image: dhjnam/public-private-api:1.0.0
+    ports:
+      - 7000:7000
+    environment:
+      - NODE_ENV=prod
+volumes:
+  mongodb-data:
+    driver: local

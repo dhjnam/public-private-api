@@ -10,12 +10,12 @@
     "mongodb:dev:deletion": "export NODE_ENV=dev && node ./src/db/deletion/deletion",
     "mongodb:dev:creation": "export NODE_ENV=dev && node ./src/db/creation/creation",
     "mongodb:dev:reset": "npm run mongodb:dev:deletion && npm run  mongodb:dev:creation && npm run  mongodb:dev:up",
-    "mongodb:dev:up": "mongod --config ./env/dev.mongodb.conf --profile=2 --port 27017",
+    "mongodb:dev:up": "mongod --config ./env/dev.mongodb.conf --profile=2 --port 27018",
     
     "mongodb:test:deletion": "export NODE_ENV=test && node ./src/db/deletion/deletion",
     "mongodb:test:creation": "export NODE_ENV=test && node ./src/db/creation/creation",
     "mongodb:test:reset": "npm run mongodb:test:deletion && npm run mongodb:test:creation && npm run  mongodb:test:up",
-    "mongodb:test:up": "mongod --config ./env/test.mongodb.conf --port 27018",
+    "mongodb:test:up": "mongod --config ./env/test.mongodb.conf --port 27019",
 
     "test:fixtures": "export NODE_ENV=test && ./watchfiles.sh | entr ts-mocha --project ./src/test/tsconfig.json --require ./src/test/fixtures.ts --timeout 0 ./src/test/*.spec.ts",
     "test:fixtures:watch": "export NODE_ENV=test && ts-mocha --project ./src/test/tsconfig.json --require ./src/test/fixtures.ts -w --watch-files '**/*.ts' --timeout 0 ./src/test/*.spec.ts",
