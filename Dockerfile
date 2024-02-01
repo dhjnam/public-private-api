@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-# COPY package.json /api/
+COPY package.json /api/
 COPY dist /api/
 # COPY env /api/env/
 
