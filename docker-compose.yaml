@@ -27,7 +27,7 @@ services:
     ports:
       - 6379:6379
   api:
-    image: dhjnam/public-private-api:1.0.0
+    image: dhjnam/public-private-api:1.0.2
     ports:
       - 7000:7000
     environment:
