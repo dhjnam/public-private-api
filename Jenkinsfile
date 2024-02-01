@@ -7,6 +7,10 @@ pipeline {
       }
     }
 
+    stage('npm install') {
+      sh 'npm install'
+    }
+
     stage('TypeScript Build') {
       steps {
         sh 'tsc --build src/tsconfig.json'
