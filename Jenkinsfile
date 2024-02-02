@@ -23,7 +23,7 @@ pipeline {
         steps {
             script {
                 // Use the withCredentials step to securely handle credentials
-                withCredentials([usernamePassword(credentialsId: '7bdffa78-2bf1-490e-a7c9-cf5358b43a58', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dhjnam-dockerhub-login-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh 'docker login --username \$USERNAME --password \$PASSWORD'
                 }
             }
