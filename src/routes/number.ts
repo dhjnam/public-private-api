@@ -38,7 +38,7 @@ router.get(
   '/private/:method', 
   // passport.authenticate('session'), 
   async (req: any, res, next) => {
-    if (!req.user) {
+    if (req.isUnauthenticated()) {
       return res.status(401).json({
         message: 'Not authorized'
       });
@@ -69,7 +69,7 @@ router.get('/public/:method', async (req, res, next) => {
   let user;
   if (req.query && req.query.user) { // if user is specified
     user = req.query.user
-  } else if (req.user) { // if I am logged in
+  } else if (req.isAuthenticated()) { // if I am logged in
     const me = req.user as IUser
     user = me.username
   } else { // return 404
@@ -111,7 +111,7 @@ router.post(
   '/generate/:method', 
   // passport.authenticate('session'),
   async (req: any, res, next) => {
-    if (!req.user) {
+    if (req.isUnauthenticated()) {
       return res.status(401).json({
         message: 'Not authorized'
       });

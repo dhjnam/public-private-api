@@ -15,7 +15,7 @@ services:
   mongo-express:
     image: mongo-express
     ports:
-      - 8080:8081
+      - 8081:8081
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=reallysupersecureadminpassword
@@ -27,7 +27,7 @@ services:
     ports:
       - 6379:6379
   api:
-    image: dhjnam/public-private-api:1.0.2
+    image: dhjnam/public-private-api:latest
     ports:
       - 7000:7000
     environment:

@@ -22,7 +22,13 @@ app.use(session({
 
 app.use(passport.authenticate('session'));
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:8888',
+  ],
+  credentials: true
+}));
 app.use(express.json());  // replaces deprecated bodyParser
 app.use('/api/v0', authRouter);
 app.use('/api/v0', numberRouter);
